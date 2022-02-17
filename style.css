@@ -2,12 +2,13 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 body{
     background: linear-gradient( #229487 150px, #d7dad5 150px);
 }
+
 .container{
     width: 80%;
     min-width: 600px;
@@ -45,6 +46,10 @@ body{
 .w-70{
     width: 70%;
     height: 100%;
+}
+
+.w-90{
+    width: 90%;
 }
 
 .d-flex{
@@ -85,6 +90,10 @@ body{
 
 .cl-b0{
     color: #b0b0b0;
+}
+
+.cl-rd{
+    color: red;
 }
 
 .fs-little{
@@ -132,6 +141,7 @@ aside{
 aside main{
     height: calc(100% - 60px);
 }
+
 #notification{
     background-color: #8dd9fc;
 }
@@ -144,6 +154,7 @@ aside main{
     background-color: #fff;
     color: #8dd9fc;
 }
+
 #search {
     background-color: #e9e9e9;
 }
@@ -178,6 +189,7 @@ aside main{
     background-color: #e9e9e9;
 }
 
+
 article{
     height: 100%;
 }
@@ -185,6 +197,8 @@ article{
 article main{
     height: calc(100% - 60px);
 }
+
+
 article #chat{
     background-image: url(img/mine.jpg);
     height: calc(100% - 60px);
@@ -198,29 +212,22 @@ article #chat{
 
 #chat .msg{
     width: 200px;
-    max-width: 40%;
-    min-width: 150px;
-    padding: 20px 10px 5px 20px;
     border-radius: 10px;
+    padding: 20px;
+    flex-direction: column;
+    position: relative;
 }
 
-#chat .msg.usr{
+#chat .msg.sent{
     background-color: #d4f9b8;
     margin-left: auto;
 }
 
-#chat .msg.ia{
+#chat .msg.received{
     background-color: #fff;
 }
 
-#chat .fas{
-    margin-left: 5px;
-    visibility: hidden;
-    cursor: pointer;
-}
-#chat .msg:hover .fas{
-    visibility: visible;
-}
+
 
 #send-msg {
     height: 60px;
@@ -236,7 +243,39 @@ article #chat{
 }
 
 
-/* active */
-.active-msg{
-    display: block;
+.dropdown{
+    visibility: hidden;
+}
+
+#chat .fas{
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.dropdown-menu{
+    width: 80px;
+    height: 40px;
+    background-color: #ffffff;
+    position: absolute;
+    right: 20px;
+    bottom: -10px;
+    padding: 5px;
+}
+
+.dropdown ul{
+    list-style-type: none;
+    height: 100%;
+}
+
+.dropdown ul li{
+    height: 50%;
+}
+
+.dropdown ul li:hover{
+    background-color: #b0b0b0;
+    cursor: pointer;
+}
+
+#chat .msg:hover .dropdown{
+    visibility: visible;
 }
