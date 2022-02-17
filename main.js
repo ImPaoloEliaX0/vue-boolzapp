@@ -14,7 +14,7 @@ const app = new Vue (
 
                     avatar: '_1',
 
-                    visible: true,
+                    visible: false,
 
                     messages: [
 
@@ -25,6 +25,8 @@ const app = new Vue (
                             text: 'Hai portato a spasso il cane?',
 
                             status: 'sent',
+
+                            show: true,
 
 
                         },
@@ -37,6 +39,8 @@ const app = new Vue (
 
                             status: 'sent',
 
+                            show: true,
+
 
                         },
 
@@ -47,6 +51,8 @@ const app = new Vue (
                             text: 'Tutto fatto!',
 
                             status: 'received',
+
+                            show: true,
 
 
                         },
@@ -72,7 +78,9 @@ const app = new Vue (
 
                             text: 'Ciao come stai?',
 
-                            status: 'sent'
+                            status: 'sent',
+
+                            show: true,
 
                         },
 
@@ -81,7 +89,9 @@ const app = new Vue (
 
                             text: 'Bene grazie! Stasera ci vediamo?',
 
-                            status: 'received'
+                            status: 'received',
+
+                            show: true,
 
                         },
 
@@ -90,7 +100,9 @@ const app = new Vue (
                             
                             text: 'Mi piacerebbe ma devo andare a fare la spesa.',
 
-                            status: 'sent'
+                            status: 'sent',
+
+                            show: true,
 
                         }
 
@@ -112,7 +124,9 @@ const app = new Vue (
 
                             text: 'La Marianna va in campagna',
 
-                            status: 'received'
+                            status: 'received',
+
+                            show: true,
                         },
 
                         {
@@ -120,7 +134,9 @@ const app = new Vue (
 
                             text: 'Sicuro di non aver sbagliato chat?',
 
-                            status: 'sent'
+                            status: 'sent',
+
+                            show: true,
                         },
 
                         {
@@ -128,7 +144,9 @@ const app = new Vue (
 
                             text: 'Ah scusa!',
 
-                            status: 'received'
+                            status: 'received',
+
+                            show: true,
                         }
 
                     ],
@@ -149,7 +167,9 @@ const app = new Vue (
 
                             text: 'Lo sai che ha aperto una nuova pizzeria?',
 
-                            status: 'sent'
+                            status: 'sent',
+
+                            show: true,
                         },
 
                         {
@@ -157,7 +177,9 @@ const app = new Vue (
 
                             text: 'Si, ma preferirei andare al cinema',
 
-                            status: 'received'
+                            status: 'received',
+
+                            show: true,
                         }
                     ],
                 },
@@ -167,62 +189,92 @@ const app = new Vue (
 
             newText: '',
 
+            active: 0,
+
+            
+            search:'',
+
 
         },
 
         methods : {
 
-            changeVisibility(array, index){
-
-                for(let i=0; i < array.length; i++){
-
-                    array[i].visible = false;
-
-                }
-                
-                this.contacts[index].visible = true;
+          
+            setContactActive(index){
+                this.active=index;
             },
 
-            addMsg(index){
+            
+            sendMessage(){
 
-                this.contacts[index].messages.push(
+
+                this.contacts[this.active].messages.push(
 
                     {
-
-                        date: '10/01/2020',
+                        date: dayjs().format('DD/MM/YYYY HH:mm:ss'),
 
                         text: this.newText,
 
-                        status: 'sent'
+                        status: 'sent',
 
-                    },
+                        show: true,
 
+                    }
 
-                );
-                
-                this.newText='';
+                )
+
+                this.newText ='';
 
                 setTimeout(() => {
-                    this.contacts[index].messages.push(
-            
+
+                    this.contacts[this.active].messages.push(
+
                         {
-                
-                            date: '10/01/2020',
-                
-                            text: 'ok',
-                
-                            status: 'received'
-                
-                        },
-                
-                
-                    );
+                            date: dayjs().format('DD/MM/YYYY HH:mm:ss'),
+    
+                            text: "ok!",
+    
+                            status: 'received',
+
+                            show: true,
+    
+                        }
+    
+                    ) 
                 }, 1000);
 
-            },
+     
+            }, 
 
+       
+            deleteMessage(active, index){
+               
+                this.filterContact[active].messages[index].show = false;
+
+                index++;
+                
+            }
 
         },
+
+        computed : {
+
+             filterContact(){
+
+                const filtered = this.contacts.filter(value=>{
+
+                    if(value.name.toLowerCase().includes(this.search.toLowerCase())){
+                        return true;
+                    };
+
+                    return false;
+
+                });
+
+                return filtered;
+
+            }
+        }
 
 
     }
