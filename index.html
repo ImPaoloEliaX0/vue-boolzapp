@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Paolo Elia">
+
     <title>BoolZapp</title>
 </head>
 <body>
 
     <div id="app" class="container">
+
         <aside class="fl-left w-30">
+
             <header class="d-flex al-ctr">
 
                 <div class="container-inner jus-bet ">
@@ -37,8 +43,8 @@
 
             </header>
 
-            <!-- main -->
             <main>
+
                 <section id="notification" class="d-flex al-ctr">
                     <div class="container-inner jus-bet g-10">
                         <div class="bell d-flex al-ctr jus-ctr">
@@ -50,29 +56,34 @@
                         </div>
                     </div>
                 </section>
+
                 <section id="search" class="d-flex al-ctr">
                     <div class="container-inner">
 
                         <i class="fa-solid fa-magnifying-glass  cl-b0"></i>
-                        <input type="text" placeholder="Cerca o inizia conversazione" class="fs-tiny">
+                        <input type="text" placeholder="Cerca o inizia conversazione" class="fs-tiny" v-model="search" >
 
                     </div>
                 </section>
+
                 <section id="chat-list" >
 
                     <ul>
 
-                        <li class="d-flex al-ctr " v-for="(contact, index) in contacts" @click="changeVisibility(contacts, index)" :class="contact.visible == true ? 'active' : ''">
+                        <li class="d-flex al-ctr " v-for="(contact, index) in filterContact"  @click="setContactActive(index)" :class="(index == active)? 'active': '' " >
 
                             <div class="container-inner clearfix">
 
                                 <div class="list-left d-flex  g-10 fl-left w-70">
                                     <div class="list-img">
+
                                         <img :src=" `./img/avatar${contact.avatar}.jpg` " alt="avatar-logo">
                                     </div>
                 
                                     <div class="list-txt">
                                         <p class="fs-little">{{contact.name}}</p>
+
+                                        
                                         <p class="cl-b0 fs-little">{{contact.messages[contact.messages.length -1] .text.slice(0,12) + '...'}}</p>                            
                                     </div>
                                 </div>
@@ -97,78 +108,86 @@
 
         </aside>
 
-        <!-- article -->
         <article class="fl-left w-70" >
+            
+            
+            <header class="d-flex al-ctr" >
+            
+                <div class="container-inner jus-bet ">
 
-            <template v-if="contact.visible" v-for="(contact, index) in contacts">
-
-                <!-- header -->
-                
-                <header class="d-flex al-ctr" >
-                
-                    <div class="container-inner jus-bet ">
-    
-                        <div class="header-left d-flex al-ctr g-10">
-                            <div class="header-img">
-                                <img :src=" `./img/avatar${contact.avatar}.jpg` " alt="avatar-logo">
-                            </div>
-        
-                            <div class="header-txt" >
-                                <p>{{contact.name}}</p>
-                                <p class="cl-b0 fs-little">Ultimo accesso oggi {{contact.messages[contact.messages.length -1].date.slice(0,11)}}</p>
-                                <p class="cl-b0 fs-little">{{contact.messages[contact.messages.length -1].date.slice(11)}}</p>
-                            </div>
+                    <div class="header-left d-flex al-ctr g-10">
+                        <div class="header-img">
+                            <img :src=" `./img/avatar${filterContact[active].avatar}.jpg` " alt="avatar-logo">
                         </div>
     
-                        <div class="header-right d-flex al-ctr g-20">
-                            <i class="fas fa-circle-notch cl-b0"></i>
-                            <i class="fas fa-comment-alt cl-b0"></i>
-                            <i class="fas fa-ellipsis-v cl-b0"></i>
+                        <div class="header-txt">
+                            <p>{{filterContact[active].name}}</p>
+
+                            
+                          <p class="cl-b0 fs-little">Ultimo accesso oggi {{filterContact[active].messages[filterContact[active].messages.length -1].date.slice(0,11)}}</p>
+                            <p class="cl-b0 fs-little">{{filterContact[active].messages[filterContact[active].messages.length -1].date.slice(11)}}</p>
                         </div>
-                        
                     </div>
-    
-                </header>
-                    <main>
-    
-                    <section id="chat">
+
+                    <div class="header-right d-flex al-ctr g-20">
+                        <i class="fas fa-circle-notch cl-b0"></i>
+                        <i class="fas fa-comment-alt cl-b0"></i>
+                        <i class="fas fa-ellipsis-v cl-b0"></i>
+                    </div>
+                    
+                </div>
+
+            </header>
+
+            <main>
+
+                <section id="chat">
+                    
+                    <div class="container-inner d-flex g-20">
                         
-                        <div class="container-inner d-flex" v-for="message in contact.messages">
-                           
-                            <div class="msg usr fs-little" v-if="message.status == 'sent'">
-                                <p class="clearfix">{{message.text}} <i class="fas fa-chevron-down fl-right"></i></p>
-                                <p class="fs-tiny txt-right ml-auto">{{message.date}}</p>
+                        <div class="msg d-flex" :class="message.status" v-for="(message, index) in filterContact[active].messages" v-show="message.show">
+
+                            <div class="msg-txt d-flex al-ctr jus-bet fs-little">
+                                <p>{{message.text}}</p>
+                                <div class="dropdown">
+                                    <i class="fas fa-chevron-down fs-little"></i>
+                                    <div class="dropdown-menu">
+                                        <ul>
+                                            <li>Message Info</li>
+                                            <li @click="deleteMessage(active, index)" class="cl-rd">Delete</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <div class="msg ia fs-little" v-if="message.status == 'received'" >
-                                <p class="clearfix">{{message.text}} <i class="fas fa-chevron-down fl-right"></i></p>
-                                <p class="fs-tiny txt-right">{{message.date}}</p>
-                            </div>
+                            <p class="fs-tiny ml-auto">{{message.date}}</p>
 
                         </div>
-                        
-                            
-                        
-                    </section>
-    
-                    <section id="send-msg" class="d-flex jus-ar al-ctr">
-                        <i class="fa-solid fa-face-grin  fs-big"></i>
-                        <input type="text" placeholder="Inserisci il tuo testo" v-model="newText" @keyup.enter="addMsg(index)">
-                        <i class="fa-solid fa-microphone  fs-big"></i>
-                    </section>
-    
-                </main>
 
-            </template>
+                    </div>    
+                    
+                </section>
+
+                <section id="send-msg" class="d-flex jus-ar al-ctr">
+                    <i class="fa-solid fa-face-grin  fs-big"></i>
+
+                    <input type="text" placeholder="Inserisci il tuo messaggio" v-model="newText" @keyup.enter="sendMessage()">
+                    <i class="fa-solid fa-microphone  fs-big"></i>
+                </section>
+
+            </main>
+
+           
 
 
         </article>
 
-
-
     </div>
 
+ 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script type="text/javascript" src="main.js"></script>
+
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <script>dayjs().format()</script>
 </body>
 </html>
